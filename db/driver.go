@@ -2,8 +2,10 @@ package db
 
 import (
 	"database/sql"
+	"log"
 	"time"
 
+	"github.com/Xebec19/pathshaala-server/utils"
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib"
@@ -13,26 +15,22 @@ type DB struct {
 	SQL *sql.DB
 }
 
-var dbConn = &DB{}
-
-const maxOpenDbConn = 10
-const maxIdleDbConn = 5
-const maxDbLifetime = 5 * time.Minute
-
-func ConnectSQL(dsn string) (*DB, error) {
-	d, err := NewDatabase(dsn)
+func ConnectDB(dsn string) (*DB, error) {
+	config, err := utils.LoadConfig("../")
+	if err != nil {
+		log.Fatalf("cannot load config:", err)
+		return nil, err
+	}
+	const maxOpenDbConn = config.maxOpenDbConn
+	const maxIdleDbConn = config.maxIdleDbConn
+	const maxDbLifetime = 5 * time.Minute
+	d, err := newDatabase(dsn)
 	if err != nil {
 		panic(err)
 	}
 	d.SetMaxOpenConns(maxOpenDbConn)
 	d.SetMaxIdleConns(maxIdleDbConn)
 	d.SetConnMaxLifetime(maxDbLifetime)
-	dbConn.SQL = d
-	err = testDB(d)
-	if err != nil {
-		return dbConn, nil
-	}
-	return nil, err
 }
 
 func testDB(d *sql.DB) error {
@@ -42,7 +40,7 @@ func testDB(d *sql.DB) error {
 	}
 }
 
-func NewDatabase(dsn string) (*sql.DB, error) {
+func newDatabase(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("pgx", dsn)
 	if err != nil {
 		return nil, err
