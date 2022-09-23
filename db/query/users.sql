@@ -1,0 +1,3 @@
+-- name: users :exec
+INSERT INTO USERS(FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE)
+VALUES($1,$2,$3,$4,$5);

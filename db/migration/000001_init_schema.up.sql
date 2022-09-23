@@ -50,3 +50,8 @@ create table scores (
     constraint fk_scores_checked_by foreign key (checked_by) references users(user_id),
     constraint fk_scores_test_taker foreign key (test_taker) references users(user_id)
 );
+
+CREATE TYPE user_role AS ENUM ('teacher','student');
+
+ALTER TABLE users 
+ALTER COLUMN role TYPE user_role using role::user_role;
