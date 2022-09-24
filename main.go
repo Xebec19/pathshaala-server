@@ -3,25 +3,25 @@ package main
 import (
 	"database/sql"
 	"log"
-	_ "github.com/lib/pq"
+
 	"github.com/Xebec19/pathshaala-server/api"
 	db "github.com/Xebec19/pathshaala-server/db/sqlc"
-)
-
-const (
-	dbDriver      = "postgres"
-	dbSource      = "postgresql://root:root@localhost:5432/pathshaala"
-	serverAddress = "0.0.0.0:8080"
+	"github.com/Xebec19/pathshaala-server/utils"
+	_ "github.com/lib/pq"
 )
 
 func main() {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := utils.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}
 	query := db.New(conn)
 	server := api.NewServer(query)
-	err = server.Start(serverAddress)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("cannot start server:", err)
 	}
