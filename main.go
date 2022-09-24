@@ -3,7 +3,8 @@ package main
 import (
 	"database/sql"
 	"log"
-
+	_ "github.com/lib/pq"
+	"github.com/Xebec19/pathshaala-server/api"
 	db "github.com/Xebec19/pathshaala-server/db/sqlc"
 )
 
@@ -19,7 +20,7 @@ func main() {
 		log.Fatal("cannot connect to db:", err)
 	}
 	query := db.New(conn)
-	server := server.NewServer(query)
+	server := api.NewServer(query)
 	err = server.Start(serverAddress)
 	if err != nil {
 		log.Fatal("cannot start server:", err)
