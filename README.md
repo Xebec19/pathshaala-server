@@ -13,3 +13,5 @@
 ```
     make migrateup
 ```
+
+### For live reloading, nodemon has been set up

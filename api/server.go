@@ -10,6 +10,8 @@ func NewServer(query *db.Queries) *Server {
 	server := &Server{query: query}
 	router := gin.Default()
 	auth.Routes(router)
+	// todo trusted proxies
+	// server.router.SetTrustedProxies(nil)
 	server.router = router
 	return server
 }

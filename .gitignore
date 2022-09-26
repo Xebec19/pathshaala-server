@@ -1,2 +1,4 @@
 go.sum
 app.env
+bin
+go.mod
