@@ -1,3 +1,3 @@
--- name: users :exec
+-- name: CreateUsers :one
 INSERT INTO USERS(FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE)
-VALUES($1,$2,$3,$4,$5);
+VALUES($1,$2,$3,$4,$5) RETURNING *;

@@ -10,12 +10,12 @@ import (
 	"database/sql"
 )
 
-const users = `-- name: users :exec
+const createUsers = `-- name: CreateUsers :one
 INSERT INTO USERS(FIRST_NAME, LAST_NAME, EMAIL, PASSWORD, ROLE)
-VALUES($1,$2,$3,$4,$5)
+VALUES($1,$2,$3,$4,$5) RETURNING user_id, first_name, last_name, email, password, profile_pic, created_on, updated_on, role
 `
 
-type usersParams struct {
+type CreateUsersParams struct {
 	FirstName string         `json:"first_name"`
 	LastName  sql.NullString `json:"last_name"`
 	Email     sql.NullString `json:"email"`
@@ -23,13 +23,25 @@ type usersParams struct {
 	Role      UserRole       `json:"role"`
 }
 
-func (q *Queries) users(ctx context.Context, arg usersParams) error {
-	_, err := q.db.ExecContext(ctx, users,
+func (q *Queries) CreateUsers(ctx context.Context, arg CreateUsersParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, createUsers,
 		arg.FirstName,
 		arg.LastName,
 		arg.Email,
 		arg.Password,
 		arg.Role,
 	)
-	return err
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Password,
+		&i.ProfilePic,
+		&i.CreatedOn,
+		&i.UpdatedOn,
+		&i.Role,
+	)
+	return i, err
 }
