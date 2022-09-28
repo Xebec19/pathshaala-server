@@ -1,15 +1,16 @@
 create extension if not exists "uuid-ossp";
+CREATE TYPE user_role AS ENUM ('teacher','student');
 
 create table users (
     user_id uuid DEFAULT uuid_generate_v1(),
     first_name varchar not null,
     last_name varchar,
-    email varchar unique,
+    email varchar unique not null,
     password varchar not null,
     profile_pic varchar,
     created_on date default current_timestamp,
     updated_on date default current_timestamp,
-    role varchar not null,
+    role user_role,
     primary key(user_id)
 );
 
@@ -50,8 +51,3 @@ create table scores (
     constraint fk_scores_checked_by foreign key (checked_by) references users(user_id),
     constraint fk_scores_test_taker foreign key (test_taker) references users(user_id)
 );
-
-CREATE TYPE user_role AS ENUM ('teacher','student');
-
-ALTER TABLE users 
-ALTER COLUMN role TYPE user_role using role::user_role;

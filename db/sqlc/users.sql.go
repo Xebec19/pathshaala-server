@@ -18,9 +18,9 @@ VALUES($1,$2,$3,$4,$5) RETURNING user_id, first_name, last_name, email, password
 type CreateUsersParams struct {
 	FirstName string         `json:"first_name"`
 	LastName  sql.NullString `json:"last_name"`
-	Email     sql.NullString `json:"email"`
+	Email     string         `json:"email"`
 	Password  string         `json:"password"`
-	Role      UserRole       `json:"role"`
+	Role      NullUserRole   `json:"role"`
 }
 
 func (q *Queries) CreateUsers(ctx context.Context, arg CreateUsersParams) (User, error) {

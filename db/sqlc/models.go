@@ -89,10 +89,10 @@ type User struct {
 	UserID     uuid.UUID      `json:"user_id"`
 	FirstName  string         `json:"first_name"`
 	LastName   sql.NullString `json:"last_name"`
-	Email      sql.NullString `json:"email"`
+	Email      string         `json:"email"`
 	Password   string         `json:"password"`
 	ProfilePic sql.NullString `json:"profile_pic"`
 	CreatedOn  sql.NullTime   `json:"created_on"`
 	UpdatedOn  sql.NullTime   `json:"updated_on"`
-	Role       UserRole       `json:"role"`
+	Role       NullUserRole   `json:"role"`
 }

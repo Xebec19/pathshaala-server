@@ -10,11 +10,11 @@ import (
 )
 
 type createUsersRequest struct {
-	FirstName string         `json:"first_name"`
-	LastName  sql.NullString `json:"last_name"`
-	Email     sql.NullString `json:"email"`
-	Password  string         `json:"password"`
-	Role      db.UserRole    `json:"role"`
+	FirstName string          `json:"first_name"`
+	LastName  sql.NullString  `json:"last_name"`
+	Email     string          `json:"email"`
+	Password  string          `json:"password"`
+	Role      db.NullUserRole `json:"role"`
 }
 
 func (server *Server) createAccount(c *gin.Context) {

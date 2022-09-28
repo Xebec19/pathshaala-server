@@ -1,26 +1,27 @@
 package db
 
-import "database/sql"
+import (
+	"database/sql"
+	"log"
+	"os"
+	"testing"
 
-config, err := utils.LoadConfig(".")
-	if err != nil {
-		log.Fatal("cannot load config:", err)
-	}
-	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	"github.com/Xebec19/pathshaala-server/utils"
+	_ "github.com/lib/pq"
+)
 
 var testQueries *Queries
 var testDB *sql.DB
 
-func TestMain(m *testing.M){
+func TestMain(m *testing.M) {
 	var err error
-	config, err := utils.LoadConfig(".")
+	config, err := utils.LoadConfig("../../")
 	if err != nil {
 		log.Fatal("cannot load config:", err)
 	}
-	testDB, err = sql.Open(config.db)
-	testDB, err = sqlOpen(config.DBDriver, config.DBSource)
+	testDB, err = sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
-		log.Fatal("cannot connect to db:",err)
+		log.Fatal("cannot connect to db:", err)
 	}
 	testQueries = New(testDB)
 	os.Exit(m.Run())
